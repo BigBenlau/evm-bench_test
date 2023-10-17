@@ -80,7 +80,7 @@ struct Args {
     runner_metadata_name: String,
 
     /// Default solc version to use if none specified in the benchmark metadata
-    #[arg(long, default_value = "stable")]
+    #[arg(long, default_value = "0.5.2")]
     default_solc_version: String,
 
     /// Default number of runs to use if none specified in the benchmark metadata

@@ -13,7 +13,7 @@
       "description": "Version of the `solc` compiler to use. This should correspond to a Docker tag.",
       "type": "string",
       "examples": ["stable", "0.4.26"],
-      "default": "stable"
+      "default": "0.5.2"
     },
     "num-runs": {
       "description": "Number of runs of this benchmark. Balance based on how long the benchmark takes.",
