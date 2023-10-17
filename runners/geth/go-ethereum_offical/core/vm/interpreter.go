@@ -21,6 +21,8 @@ import (
 	"evm-bench/runners/runner-geth/go-ethereum_offical/common/math"
 	"evm-bench/runners/runner-geth/go-ethereum_offical/crypto"
 	"evm-bench/runners/runner-geth/go-ethereum_offical/log"
+	"fmt"
+	"time"
 )
 
 // Config are the configuration options for the Interpreter
@@ -177,6 +179,7 @@ func (in *EVMInterpreter) Run(contract *Contract, input []byte, readOnly bool) (
 		// Get the operation from the jump table and validate the stack to ensure there are
 		// enough stack items available to perform the operation.
 		op = contract.GetOp(pc)
+		fmt.Println("interpreter.go/opcode: ", op)
 		operation := in.table[op]
 		cost = operation.constantGas // For tracing
 		// Validate stack
@@ -189,6 +192,8 @@ func (in *EVMInterpreter) Run(contract *Contract, input []byte, readOnly bool) (
 			return nil, ErrOutOfGas
 		}
 		if operation.dynamicGas != nil {
+			start := time.Now()
+
 			// All ops with a dynamic memory usage also has a dynamic gas cost.
 			var memorySize uint64
 			// calculate the new memory size and expand the memory to fit
@@ -222,12 +227,21 @@ func (in *EVMInterpreter) Run(contract *Contract, input []byte, readOnly bool) (
 			if memorySize > 0 {
 				mem.Resize(memorySize)
 			}
+			timeTaken := time.Since(start)
+			fmt.Println("DynamicGas Nanoseconds(10^-9):", float64(timeTaken.Nanoseconds()))
+
 		} else if debug {
 			in.evm.Config.Tracer.CaptureState(pc, op, gasCopy, cost, callContext, in.returnData, in.evm.depth, err)
 			logged = true
 		}
 		// execute the operation
+		start := time.Now()
+
 		res, err = operation.execute(&pc, in, callContext)
+
+		timeTaken := time.Since(start)
+		fmt.Println("Execute Nanoseconds(10^-9):", float64(timeTaken.Nanoseconds()))
+
 		if err != nil {
 			break
 		}

@@ -82,8 +82,7 @@ var cmd = &cobra.Command{
 			Data:     contractCodeBytes,
 		})
 
-		var signer types.Signer
-		signer = types.NewEIP2930Signer(big.NewInt(1))
+		var signer = types.NewEIP2930Signer(big.NewInt(1))
 		signer.Sender(tx)
 		createMsg, _ := core.TransactionToMessage(tx, signer, zeroValue)
 
@@ -124,8 +123,8 @@ var cmd = &cobra.Command{
 			_, _, err := evm.Call(vm.AccountRef(callerAddress), *msg.To, msg.Data, msg.GasLimit, msg.Value)
 			timeTaken := time.Since(start)
 
-			fmt.Println(float64(timeTaken.Microseconds()) / 1e3)
-
+			fmt.Println("Nanoseconds(10^-9):", float64(timeTaken.Nanoseconds()))
+			fmt.Println("Cycle End\n")
 			check(err)
 
 			statedb.RevertToSnapshot(snapshot)
