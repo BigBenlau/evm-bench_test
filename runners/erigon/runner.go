@@ -2,9 +2,13 @@ package main
 
 import (
 	"fmt"
+	"math/big"
 	"os"
 
+	libcommon "github.com/ledgerwatch/erigon-lib/common"
 	"github.com/ledgerwatch/erigon/common"
+	"github.com/ledgerwatch/erigon/core"
+	"github.com/ledgerwatch/erigon/core/types"
 	"github.com/ledgerwatch/erigon/params"
 	"github.com/spf13/cobra"
 )
@@ -32,28 +36,30 @@ var cmd = &cobra.Command{
 		contractCodeBytes := common.Hex2Bytes(string(contractCodeHex))
 		calldataBytes := common.Hex2Bytes(calldata)
 
-		// fmt.Println(contractCodeBytes)
-		// fmt.Println(calldataBytes)
+		fmt.Println(contractCodeBytes)
+		fmt.Println(calldataBytes)
 
 		zeroAddress := libcommon.BytesToAddress(common.FromHex("0x0000000000000000000000000000000000000000"))
 		callerAddress := libcommon.BytesToAddress(common.FromHex("0x1000000000000000000000000000000000000001"))
 
-		// fmt.Println(zeroAddress)
-		// fmt.Println(callerAddress)
+		fmt.Println(zeroAddress)
+		fmt.Println(callerAddress)
+
 		var config = params.MainnetChainConfig
 		rules := config.Rules(uint64(12965000), uint64(1681338458))
 		fmt.Println(config)
 		fmt.Println(rules)
 
-		// genesis := &core.Genesis{
-		// 	Config:     config,
-		// 	Coinbase:   zeroAddress,
-		// 	Difficulty: Difficulty: big.NewInt(17179869184),,
-		// 	GasLimit:   5000,
-		// 	Number:     1681338457,
-		// 	Timestamp:  1681338458,
-		// 	Alloc:      core.readPrealloc("alloc/mainnet.json"),
-		// }
+		alloc := core.readPrealloc("alloc/mainnet.json"),
+		genesis := &types.Genesis{
+			Config:     config,
+			Coinbase:   zeroAddress,
+			Difficulty: big.NewInt(17179869184),
+			GasLimit:   5000,
+			Number:     1681338457,
+			Timestamp:  1681338458,
+			Alloc:      alloc,
+		}
 
 		// fmt.Println(genesis.Alloc)
 		// for i := 0; i < numRuns; i++ {
