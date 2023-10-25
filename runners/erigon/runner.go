@@ -1,13 +1,19 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"math/big"
 	"os"
 
 	libcommon "github.com/ledgerwatch/erigon-lib/common"
+	"github.com/ledgerwatch/erigon-lib/kv/memdb"
+
+	// "github.com/ledgerwatch/erigon-lib/kv/memdb"
+
+	// "github.com/ledgerwatch/erigon-lib/kv/memdb"
 	"github.com/ledgerwatch/erigon/common"
-	"github.com/ledgerwatch/erigon/core"
+	"github.com/ledgerwatch/erigon/core/state"
 	"github.com/ledgerwatch/erigon/core/types"
 	"github.com/ledgerwatch/erigon/params"
 	"github.com/spf13/cobra"
@@ -33,8 +39,8 @@ var cmd = &cobra.Command{
 		contractCodeHex, err := os.ReadFile(contractCodePath)
 		check(err)
 
-		contractCodeBytes := common.Hex2Bytes(string(contractCodeHex))
-		calldataBytes := common.Hex2Bytes(calldata)
+		contractCodeBytes := libcommon.Hex2Bytes(string(contractCodeHex))
+		calldataBytes := libcommon.Hex2Bytes(calldata)
 
 		fmt.Println(contractCodeBytes)
 		fmt.Println(calldataBytes)
@@ -50,7 +56,6 @@ var cmd = &cobra.Command{
 		fmt.Println(config)
 		fmt.Println(rules)
 
-		alloc := core.readPrealloc("alloc/mainnet.json"),
 		genesis := &types.Genesis{
 			Config:     config,
 			Coinbase:   zeroAddress,
@@ -58,10 +63,17 @@ var cmd = &cobra.Command{
 			GasLimit:   5000,
 			Number:     1681338457,
 			Timestamp:  1681338458,
-			Alloc:      alloc,
 		}
+		fmt.Println(genesis)
 
-		// fmt.Println(genesis.Alloc)
+		//create database
+		// tx, _ := memdb.BeginRw(context.Background())
+
+		testkv := memdb.New("")
+		tx, _ := testkv.BeginRw(context.Background())
+		r := state.NewPlainState(tx, 0, nil)
+		// statedb := state.New(r)
+		fmt.Println(r)
 		// for i := 0; i < numRuns; i++ {
 		// 	fmt.Println("..")
 		// }
