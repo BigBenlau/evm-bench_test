@@ -1,0 +1,3 @@
+block,state,err:=core.GenesisToBlock(genesis,"")   
+
+blockContext := core.NewEVMBlockContext(genesis.ToBlock().Header(), nil, &zeroAddress)

@@ -72,7 +72,7 @@ var cmd = &cobra.Command{
 			GasPrice: zeroValue,
 			Data:     contractCodeBytes,
 		})
-
+		fmt.Println("tx:  ", tx)
 		var signer types.Signer
 		signer = types.NewEIP2930Signer(big.NewInt(1))
 		signer.Sender(tx)
@@ -85,6 +85,8 @@ var cmd = &cobra.Command{
 		txContext := core.NewEVMTxContext(createMsg)
 		evm := vm.NewEVM(blockContext, txContext, statedb, config, vm.Config{})
 
+		fmt.Println("blockContext:  ", blockContext)
+		fmt.Println("evm:  ", evm)
 		fmt.Println("chainconfig:  ", evm.ChainConfig())
 		_, contractAddress, _, err := evm.Create(vm.AccountRef(callerAddress), contractCodeBytes, gasLimit, new(big.Int))
 		check(err)

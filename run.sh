@@ -1,1 +1,1 @@
-RUST_LOG=trace cargo run -- --runners erigon --benchmarks ten-thousand-hashes
+RUST_LOG=trace cargo run -- --runners $1 --benchmarks ten-thousand-hashes
