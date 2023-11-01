@@ -7,7 +7,7 @@ edition = "2021"
 bytes = "1.5"
 clap = { version = "4.4.6", features = ["derive"] }
 hex = "0.4"
-primitive-types = { version = "0.11", features = ["rlp"] }
+primitive-types = { version = "0.12.1", features = ["rlp"] }
 # from branch primitives
-revm-interpreter = { git = "https://github.com/bluealloy/revm", rev="3fda52e", package="revm-interpreter"}
+revm-interpreter = { git = "https://github.com/bluealloy/revm", rev="23cbac4", package="revm-interpreter"}
 
