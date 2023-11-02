@@ -3,8 +3,10 @@ mod contract;
 pub mod memory;
 mod stack;
 
+use std::{time::Instant};
+
 use crate::primitives::{Bytes, Spec};
-use crate::{alloc::boxed::Box, opcode::eval, Gas, Host, InstructionResult};
+use crate::{alloc::boxed::Box, opcode::eval, OpCode, Gas, Host, InstructionResult};
 
 pub use analysis::BytecodeLocked;
 pub use contract::Contract;
@@ -135,7 +137,15 @@ impl Interpreter {
         // byte instruction is STOP so we are safe to just increment program_counter bcs on last instruction
         // it will do noop and just stop execution of this contract
         self.instruction_pointer = unsafe { self.instruction_pointer.offset(1) };
+        let op_item = OpCode::new(opcode);
+        println!("opcode: {}", op_item.unwrap().as_str());
+
+        let timer = Instant::now();
+
         eval::<H, SPEC>(opcode, self, host);
+
+        let dur = timer.elapsed();
+        println!("Execute Nanoseconds(10^-9): {}", dur.as_nanos())
     }
 
     /// Executes the interpreter until it returns or stops.
